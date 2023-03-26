@@ -1,0 +1,13 @@
+.netlify
+.svelte-kit
+build
+node_modules
+test-results
+playwright-report
+playwright/.cache/
+
+# Ignore files for PNPM, NPM and YARN
+
+pnpm-lock.yaml
+package-lock.json
+yarn.lock

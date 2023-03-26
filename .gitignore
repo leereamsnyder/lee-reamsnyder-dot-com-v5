@@ -1,0 +1,25 @@
+**/.DS_Store
+
+# Dependency directories
+node_modules/
+
+# Optional npm cache directory
+.npm
+
+# sveltekit appears to place files here
+.svelte-kit/
+
+# current sveltekit adapter-static build output 
+build/
+
+# test crud
+/test-results/
+/playwright-report/
+/playwright/.cache/
+
+
+# if you happen to use yarn
+yarn-error.log
+
+# Local Netlify folder
+.netlify

@@ -1,0 +1,25 @@
+{
+  // turns of VSCode's built-in validator; we're using ESLint
+  "javascript.validate.enable": false,
+
+  "files.autoSave": "off",
+
+  // use Prettier wherever you can
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+
+  // .svelte files have a dedicated plugin + formatter
+  // (it uses prettier under the covers)
+  "[svelte]": {
+    "editor.defaultFormatter": "svelte.svelte-vscode"
+  },
+
+  // this makes eslint errors show up in .svelte files
+  "eslint.validate": ["javascript", "svelte"],
+
+  // configuration for Deno in Netlify edge functions
+  "deno.enable": true,
+  "deno.enablePaths": ["netlify/edge-functions"],
+  "deno.unstable": true,
+  "deno.importMap": ".netlify/edge-functions-import-map.json",
+  "deno.path": "/Users/leereamsnyder/Library/Preferences/netlify/deno-cli/deno"
+}

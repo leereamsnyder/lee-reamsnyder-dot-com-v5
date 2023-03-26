@@ -1,0 +1,7 @@
+# Redirect default Netlify subdomain to primary domain
+
+https://leereamsnyder.netlify.com/* https://www.leereamsnyder.com/:splat 301!
+
+# I see some 404s in the analytics for /rss so I'll do a rewrite to the rss.xml file
+
+/rss /rss.xml 200

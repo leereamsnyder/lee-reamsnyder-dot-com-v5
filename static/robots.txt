@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /thanks
+Disallow: /404
+Disallow: /offline
+
+Sitemap: https://www.leereamsnyder.com/sitemap.xml

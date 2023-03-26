@@ -1,0 +1,50 @@
+[build]
+  command = "npm run build"
+  publish = "build"
+
+[build.environment]
+  # Netlify's build process defaults to UTC
+  # This will make it match my local environment in Eastern time
+  # Which mostly affects the timestamps on publish dates
+  TZ = "America/New_York"
+
+  # set TERM variable for terminal output
+  TERM = "xterm"
+
+[dev]
+  framework = "#static"
+  autoLaunch = false
+
+[[plugins]]
+  package = "netlify-plugin-checklinks"
+    [plugins.inputs]
+    skipPatterns = [
+      # these are also a netlify redirect
+      '/cloudinary-auto-optimized', 
+      '/cloudinary-resized-n-optimized', 
+
+      # see https://github.com/leereamsnyder/leereamsnyder.com/issues/321
+      # sveltekit adapter-static as of v38 outputs like
+      # /blog/${FOO}.html
+      # /blog/${FOO}/__data.json
+      # but all those directories with __data.json do not have an index.html of their own
+      # and this plugin I believe is expecting a possible-"directory"-y link (eg href="/blog/foo") 
+      # to have an index.html
+      # so this filter feels a little over-eager, but I don't ACTUALLY link to anything
+      # internal to my own site with an "whatever/index.html" URL
+      # and this gets the build rolling again
+      '/index.html'
+    ]
+
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+
+# Custom plugin for handling rewrites for cloudinary
+[[plugins]]
+  package = "/netlify/plugins/cloudinary-image-rewrite"
+
+[[plugins]]
+  package = "@netlify/plugin-lighthouse"
+
+[[plugins]]
+  package = "netlify-plugin-playwright-cache"

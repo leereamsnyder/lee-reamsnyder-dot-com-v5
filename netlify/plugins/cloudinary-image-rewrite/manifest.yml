@@ -1,0 +1,6 @@
+name: cloudinary-image-rewrite
+# inputs:
+#   - name: overrideLocalCheck
+#     description: If set to "true", will build as if on Netlify's servers even if you are building locally
+#   - name: preferDeployUrl
+#     description: If set to "true", will use DEPLOY_URL even on CONTEXT === "production" builds

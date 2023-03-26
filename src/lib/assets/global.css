@@ -1,0 +1,552 @@
+/*
+	fluid & clamped type scale from Utopia
+*/
+/* @link https://utopia.fyi/generator-mk-ii?c=320,16,1.25,1140,24,1.414,5,4,768 */
+
+:root {
+  --step--4: clamp(0.4094rem, 0.4228rem + -0.0671vw, 0.375rem);
+  --step--3: clamp(0.5119rem, 0.5046rem + 0.0366vw, 0.5306rem);
+  --step--2: clamp(0.64rem, 0.5971rem + 0.2146vw, 0.75rem);
+  --step--1: clamp(0.8rem, 0.6983rem + 0.5085vw, 1.0606rem);
+  --step-0: clamp(1rem, 0.8049rem + 0.9756vw, 1.5rem);
+  --step-1: clamp(1.25rem, 0.91rem + 1.7vw, 2.1213rem);
+  --step-2: clamp(1.5625rem, 1.0018rem + 2.8037vw, 2.9994rem);
+  --step-3: clamp(1.9531rem, 1.0604rem + 4.4634vw, 4.2406rem);
+  --step-4: clamp(2.4413rem, 1.0539rem + 6.9366vw, 5.9963rem);
+  --step-5: clamp(3.0519rem, 0.9341rem + 10.589vw, 8.4788rem);
+}
+
+/* 
+  See #239 macOS Safari does not resize fonts when the viewport changes sizes 
+  https://www.sarasoueidan.com/blog/safari-fluid-typography-bug-fix/ suggested this fix
+  and a fix might be coming soon https://bugs.webkit.org/show_bug.cgi?id=224614
+*/
+body {
+  -webkit-marquee-increment: 0vw;
+}
+
+:root {
+  /* Kipo color theme https://www.pluggedin.com/wp-content/uploads/2020/04/kipo-age-of-wonderbeasts.jpg */
+  --color-one: hsl(313, 80%, 32%);
+  --color-accent: hsl(309, 47%, 81%);
+  --color-two: hsl(186, 56%, 49%);
+  --color-two-aa-contrast: hsl(
+    186.9,
+    59.8%,
+    42.9%
+  ); /* --color-two (blue) but passes WCAG AA on white */
+  --color-three: hsl(77, 72%, 61%);
+  --color-link: var(--color-two-aa-contrast);
+  --color-link-visited: var(--color-one);
+  --color-link-hover: var(--color-three);
+  --red: hsl(355, 68%, 44%);
+  --page-background: #fff;
+  --page-background-transparent: hsla(0, 0%, 100%, 0);
+  --text: #333;
+  --meta: #767676;
+  --nav-icons: hsl(180, 10%, 65%);
+  --nav-icons-background: hsl(181, 15%, 95%);
+  --code-background: hsl(315, 65%, 96%);
+  --aside-background: hsl(45, 95%, 96%);
+  --aside-border: hsl(42, 85%, 50%);
+  --color-timeline: var(--color-one);
+
+  --font-family-sans: Concourse, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+  --font-family-serif: NewKansas, Georgia, 'Times New Roman', Times, serif;
+  --font-family-mono: MonoLisa, Consolas, Monaco, 'Courier New', Courier, monospace;
+
+  --page-left: var(--step--1);
+  --page-right: var(--step--1);
+  --content-left-padding: 0;
+  --content-max-width: calc(var(--step-0) * 27);
+
+  --easing: cubic-bezier(0.08, 0.82, 0.17, 1);
+}
+
+@media screen and (min-width: 50rem) {
+  :root {
+    --content-left-padding: calc(var(--step-0) * 8);
+  }
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --page-background: hsl(233, 13%, 25%);
+    --page-background-transparent: hsla(233, 13%, 25%, 0);
+    --text: hsl(233, 10%, 86%);
+    --meta: hsl(233, 12%, 67%);
+    --color-one: hsl(0, 60%, 30%);
+    --color-two: hsl(0, 70%, 40%);
+    --color-two-aa-contrast: hsl(0, 95%, 75%);
+    /* --color-three: hsl(37, 100%, 50%); */
+    --color-three: hsl(50, 72%, 55%);
+    --color-link-visited: var(--meta);
+    --code-background: hsl(230, 9%, 11%);
+    --color-accent: hsl(100, 30%, 70%);
+    --aside-background: var(--code-background);
+    --aside-border: var(--meta);
+    --color-timeline: var(--color-two);
+    --nav-icons: hsl(24, 7%, 58%);
+    --nav-icons-background: hsl(236, 13%, 29%);
+  }
+}
+
+/***************
+  
+  RESET/NORMALIZE
+  (bunch of stuff cherry-picked from normalize@8
+  
+****************/
+
+/**
+ * 1. Prevent adjustments of font size after orientation changes in iOS.
+ * 1. Webhint requires the non-prefixed version to be there also
+ * 3. Better box model
+ */
+
+html {
+  -webkit-text-size-adjust: none; /* 1 */
+  text-size-adjust: none; /* 2 */
+  box-sizing: border-box; /* 3 */
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: inherit; /* 3 */
+}
+
+/**
+ * Enable styling of HTML5 block elements for ridiculously old browsers
+ */
+
+header,
+article,
+section,
+nav,
+menu,
+aside,
+hgroup,
+figure,
+figcaption,
+footer {
+  display: block;
+}
+
+/**
+ * Remove the margin in all browsers.
+ */
+
+body {
+  margin: 0;
+}
+
+/**
+ * Render the `main` element consistently in IE.
+ */
+
+main {
+  display: block;
+}
+
+/**
+ * 1. Correct the inheritance and scaling of font size in all browsers.
+ * 2. Correct the odd `em` font sizing in all browsers.
+ */
+
+pre,
+code,
+kbd,
+samp {
+  font-family: monospace, monospace; /* 1 */
+  font-size: 1em; /* 2 */
+}
+
+/**
+ * Remove the gray background on active links in IE 10.
+ */
+
+a {
+  background-color: transparent;
+}
+
+/**
+ * 1. Remove the bottom border in Chrome 57-
+ * 2. Add the correct text decoration in Chrome, Edge, IE, Opera, and Safari.
+ */
+
+abbr[title] {
+  border-bottom: none; /* 1 */
+  text-decoration: underline; /* 2 */
+  text-decoration: underline dotted; /* 2 */
+}
+
+/**
+ * Add the correct font size in all browsers.
+ */
+
+small {
+  font-size: 80%;
+}
+
+/**
+ * Prevent `sub` and `sup` elements from affecting the line height in
+ * all browsers.
+ */
+
+sub,
+sup {
+  font-size: 75%;
+  line-height: 0;
+  position: relative;
+  vertical-align: baseline;
+}
+
+sub {
+  bottom: -0.25em;
+}
+
+sup {
+  top: -0.5em;
+}
+
+/**
+ * Remove the border on images inside links in IE 10.
+ */
+
+img {
+  border-style: none;
+}
+
+/**
+ * Remove possible quote marks in `blockquote` and `q` elements
+ */
+blockquote:before,
+blockquote:after,
+q:before,
+q:after {
+  content: '';
+}
+blockquote,
+q {
+  quotes: '' '';
+}
+
+/**
+ * 1. Change the font styles in all browsers.
+ * 2. Remove the margin in Firefox and Safari.
+ */
+
+button,
+input,
+optgroup,
+select,
+textarea {
+  font-family: inherit; /* 1 */
+  font-size: 100%; /* 1 */
+  line-height: 1.15; /* 1 */
+  margin: 0; /* 2 */
+}
+
+/**
+ * Show the overflow in IE.
+ * 1. Show the overflow in Edge.
+ */
+
+button,
+input {
+  /* 1 */
+  overflow: visible;
+}
+
+/**
+ * Remove the inheritance of text transform in Edge, Firefox, and IE.
+ * 1. Remove the inheritance of text transform in Firefox.
+ */
+
+button,
+select {
+  /* 1 */
+  text-transform: none;
+}
+
+/**
+ * Correct the inability to style clickable types in iOS and Safari.
+ */
+
+button,
+[type='button'],
+[type='reset'],
+[type='submit'] {
+  -webkit-appearance: button;
+}
+
+/**
+ * Remove the inner border and padding in Firefox.
+ */
+
+button::-moz-focus-inner,
+[type='button']::-moz-focus-inner,
+[type='reset']::-moz-focus-inner,
+[type='submit']::-moz-focus-inner {
+  border-style: none;
+  padding: 0;
+}
+
+/**
+ * Restore the focus styles unset by the previous rule.
+ */
+
+button:-moz-focusring,
+[type='button']:-moz-focusring,
+[type='reset']:-moz-focusring,
+[type='submit']:-moz-focusring {
+  outline: 1px dotted ButtonText;
+}
+
+/**
+ * 1. Correct the odd appearance in Chrome and Safari.
+ * 2. Correct the outline style in Safari.
+ */
+
+[type='search'] {
+  -webkit-appearance: textfield; /* 1 */
+  outline-offset: -2px; /* 2 */
+}
+
+/**
+ * Add the correct display in IE 10.
+ */
+
+[hidden] {
+  display: none;
+}
+
+body {
+  background-color: #fff;
+  background-color: var(--page-background);
+  color: #333;
+  color: var(--text);
+  font-size: var(--step-0);
+  font-family: var(--font-family-sans);
+  font-weight: 400;
+  font-style: normal;
+  /* 
+		https://mbtype.com/pdf/concourse-type-specimen.pdf 
+
+		ss02 is “British mode”
+	*/
+  font-feature-settings: 'kern' 1, 'ss02', 'onum';
+  font-kerning: normal;
+}
+
+.alternate-arrows {
+  font-family: var(--font-family-sans);
+  font-feature-settings: 'ss08';
+}
+
+.italic {
+  font-family: var(--font-family-sans);
+  font-weight: normal;
+  font-style: italic;
+}
+
+.bold {
+  font-family: var(--font-family-sans);
+  font-weight: 700;
+  font-style: normal;
+}
+
+.bold-italic {
+  font-family: var(--font-family-sans);
+  font-weight: 700;
+  font-style: italic;
+}
+
+code,
+tt,
+kbd,
+samp,
+.monospace,
+.intro {
+  font-family: var(--font-family-mono);
+  font-weight: 400;
+}
+
+/* Situations where you do not want hyphenation: Abbreviations and Proper Nouns (pn) */
+.pn,
+abbr {
+  hyphens: manual;
+}
+
+.small-caps,
+.sc,
+abbr {
+  font-family: ConcourseCaps, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, sans-serif;
+  /* force to lowercase, which is all I've subset and also the proper small caps are the lowercase */
+  text-transform: lowercase;
+  font-weight: 400;
+  font-style: normal;
+}
+
+.new-kansas-black {
+  font-family: var(--font-family-serif);
+  font-weight: 900;
+  font-style: normal;
+}
+
+.new-kansas-regular {
+  font-family: var(--font-family-serif);
+  font-weight: 400;
+  font-style: normal;
+}
+
+/***************
+  
+  TYPOGRAPHY
+  
+****************/
+
+html {
+  line-height: 1.414; /* @todo maybe revisit when you have a better sense of max line length */
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  line-height: 1.2;
+}
+
+/***************
+  
+  STYLED LINKS
+  
+****************/
+
+.styled-links a {
+  color: inherit;
+  text-decoration: none;
+  transition: border-color 0.2s var(--easing);
+  border-bottom: 2px dotted var(--color-link);
+}
+
+.styled-links a:visited {
+  border-bottom-color: var(--color-link-visited);
+}
+
+.styled-links a:hover {
+  border-bottom-color: var(--color-link-hover);
+}
+
+@supports (text-decoration-style: dotted) {
+  .styled-links a {
+    border-bottom-width: 0;
+    text-decoration: underline;
+    text-decoration-skip-ink: auto;
+    text-decoration-style: dotted;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 2px;
+    text-decoration-color: var(--color-link);
+    transition: text-decoration-color 0.2s var(--easing);
+  }
+
+  .styled-links a:visited {
+    text-decoration-color: var(--color-link-visited);
+  }
+
+  .styled-links a:hover {
+    text-decoration-color: var(--color-link-hover);
+  }
+}
+
+/***************
+  
+  ACCESSIBILITY
+
+****************/
+
+/* Forgot alt! */
+img:not([alt]) {
+  border: 5px dashed var(--red);
+}
+
+/* Global :focus style */
+*:focus {
+  outline: 3px solid var(--color-two-aa-contrast);
+}
+
+/* Invisible but accessible text */
+.a11y {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+}
+
+.a11y:active,
+.a11y:focus {
+  clip: auto;
+  height: auto;
+  margin: 0;
+  overflow: visible;
+  position: static;
+  width: auto;
+}
+
+/*
+  Prefers reduced motion
+
+  This is a bit of sledgehammer, as it's only _strictly_ necessary to remove animations
+  that might be troublesome (eg vestibular issues)
+*/
+@media screen and (prefers-reduced-motion: reduce) {
+  * {
+    transition-duration: 0 !important;
+  }
+}
+
+/***************
+  
+  RESPONSIVE MEDIA
+  see: https://www.zachleat.com/web/fluid-images/
+  
+****************/
+
+img,
+object,
+iframe,
+embed,
+video {
+  max-width: 100%;
+}
+
+object,
+iframe,
+embed,
+video {
+  display: block;
+}
+
+img[width][height],
+video[width][height] {
+  height: auto; /* Preserve aspect ratio */
+}
+
+/***************
+  
+  LAYOUT
+  
+****************/
+
+.clearfix:after {
+  content: '';
+  display: table;
+  clear: both;
+}
